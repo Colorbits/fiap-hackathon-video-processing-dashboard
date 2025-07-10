@@ -1,0 +1,254 @@
+/* VideoList.css */
+.video-list-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.video-list-container h2 {
+  color: var(--text-color);
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.video-card {
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer; /* Indica que o card é clicável */
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.thumbnail {
+  height: 160px;
+  width: 100%;
+  background-color: #f0f0f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.video-info {
+  padding: 15px;
+}
+
+.video-info h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.status-uploaded {
+  color: #ff9800;
+}
+
+.status-uploading {
+  color: #ff9800;
+}
+
+.status-processing {
+  color: #2196f3;
+}
+
+.status-completed {
+  color: #4caf50;
+}
+
+.status-ready {
+  color: #4caf50;
+}
+
+.status-failed {
+  color: #f44336;
+}
+
+.created-at {
+  margin: 5px 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.video-actions {
+  padding: 0 15px 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.action-button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.action-button.view {
+  background-color: #2196f3;
+  color: white;
+}
+
+.action-button.view:hover {
+  background-color: #0b7dda;
+}
+
+.action-button.download {
+  background-color: #4caf50;
+  color: white;
+}
+
+.action-button.download:hover {
+  background-color: #3d8b40;
+}
+
+.action-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.loading-container,
+.error-container,
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  text-align: center;
+}
+
+.loading-container .spinner {
+  margin-bottom: 20px;
+}
+
+.error-container {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+  padding: 16px;
+  border-radius: var(--border-radius);
+  margin: 20px 0;
+  text-align: center;
+}
+
+.error-container h3 {
+  color: #f44336;
+  margin-bottom: 10px;
+}
+
+.empty-container {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text-color);
+}
+
+.empty-container h3 {
+  margin-bottom: 10px;
+}
+
+.empty-container p {
+  color: #777;
+}
+
+.retry-button,
+.upload-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.retry-button {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.upload-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.retry-button:hover {
+  background-color: #e0e0e0;
+}
+
+.upload-button:hover {
+  background-color: #0b7dda;
+}
+
+/* Spinners */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #2196f3;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.spinner-tiny {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Processing badge */
+.processing-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

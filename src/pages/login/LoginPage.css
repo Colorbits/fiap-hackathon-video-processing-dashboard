@@ -1,0 +1,15 @@
+/* LoginPage.css */
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  background-color: var(--background-color);
+}
