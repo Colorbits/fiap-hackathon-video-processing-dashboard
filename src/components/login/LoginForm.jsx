@@ -12,7 +12,6 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [useMock, setUseMock] = useState(false);
 
   // URL da API de backend
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
@@ -38,53 +37,17 @@ const LoginForm = () => {
     setIsLoading(true);
 
     try {
-
-     
-      try {
-        const response = await axios.post(`${API_URL}/auth/login`, { name: formData.name, email: formData.email, password: formData.password });
+      if (isLoginMode) {
+        const response = await axios.post(`${API_URL}/auth/login`, { email: formData.email, password: formData.password });
         const data = response.data;
-        
 
         handleAuthSuccess(data);
-      } catch (axiosError) {
-        console.error('Erro ao acessar API:', axiosError);
-        
-        // Tratamento de erros específico para axios
-        if (axiosError.response) {
-          // A requisição foi feita e o servidor respondeu com um status de erro
-          const errorMessage = axiosError.response.data?.message || 
-            `Erro ${axiosError.response.status}: ${axiosError.response.statusText}`;
-          setError(errorMessage);
-        } else if (axiosError.request) {
-          // A requisição foi feita mas não houve resposta
-          console.log('Sem resposta do servidor:', axiosError.request);
-          setError('Servidor indisponível. Tente novamente mais tarde.');
-          
-          // Ativa o modo offline (mock) automaticamente se o servidor estiver indisponível
-          setUseMock(true);
-          
-          // Tenta usar o mock diretamente
-          if (isLoginMode) {
-            const mockResult = mockLogin(formData.email, formData.password);
-            if (mockResult.success) {
-              handleAuthSuccess(mockResult.data);
-            } else {
-              setError(mockResult.message);
-            }
-          } else {
-            const mockResult = mockRegister(formData.name, formData.email, formData.password);
-            if (mockResult.success) {
-              handleAuthSuccess(mockResult.data);
-            } else {
-              setError(mockResult.message);
-            }
-          }
-        } else {
-          // Erro ao configurar a requisição
-          console.log('Erro de configuração:', axiosError.message);
-          setError('Erro ao configurar a requisição: ' + axiosError.message);
-        }
+
+      } else {
+        await axios.post(`${API_URL}/users`, { name: formData.name, email: formData.email, password: formData.password });
+        handleRegisterSuccess();
       }
+
     } catch (err) {
       setError(err.message || 'Ocorreu um erro. Tente novamente.');
     } finally {
@@ -96,25 +59,21 @@ const LoginForm = () => {
     if (isLoginMode) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('refreshToken', data.refreshToken);
-      
+
       if (data.expiresAt) {
         localStorage.setItem('expiresAt', data.expiresAt);
       }
-      
+
       if (data.user) {
         localStorage.setItem('user', JSON.stringify(data.user));
       }
-      
+
       setSuccess('Login realizado com sucesso!');
-      
-      // Redirecionar para a dashboard usando React Router
-      // Se o componente useNavigate estiver disponível
+
       window.location.href = '/dashboard';
     } else {
-      // Para cadastro: mostrar mensagem de sucesso e mudar para tela de login
       setSuccess('Cadastro realizado com sucesso! Você já pode fazer login.');
       setIsLoginMode(true);
-      // Limpar campos após o cadastro
       setFormData({
         name: '',
         email: '',
@@ -123,19 +82,22 @@ const LoginForm = () => {
     }
   };
 
+  const handleRegisterSuccess = () => {
+    setSuccess('Cadastro realizado com sucesso! Você já pode fazer login.');
+    setIsLoginMode(true);
+    setFormData({
+      name: '',
+      email: '',
+      password: ''
+    });
+  };
+
   return (
     <div className="auth-card">
       <h1 className="auth-title">
         FIAP Hackathon
         <div className="subtitle">Sistema de Processamento de Vídeos</div>
       </h1>
-
-      {useMock && (
-        <div className="mock-alert">
-          Usando modo offline (mock). A API não está acessível.
-        </div>
-      )}
-
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
 
@@ -182,8 +144,8 @@ const LoginForm = () => {
           />
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="auth-button"
           disabled={isLoading}
         >
@@ -193,7 +155,7 @@ const LoginForm = () => {
 
       <div className="auth-toggle">
         {isLoginMode ? 'Não tem uma conta?' : 'Já tem uma conta?'}
-        <button 
+        <button
           onClick={toggleMode}
           className="toggle-button"
         >

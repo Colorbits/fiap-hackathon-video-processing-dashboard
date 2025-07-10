@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import VideoContext from './VideoContext';
 import { videoApiService } from '../services/videoApiService';
 import { videoImageService } from '../services/videoImageService';
@@ -13,7 +13,6 @@ const VideoProvider = ({ children }) => {
   const [loadingFrames, setLoadingFrames] = useState(false);
   const [framesError, setFramesError] = useState(null);
 
-  // Referência para controle do intervalo de atualização automática
   const pollingIntervalRef = useRef(null);
 
   const loadVideos = useCallback(async () => {
@@ -58,16 +57,13 @@ const VideoProvider = ({ children }) => {
     }
   }, []);
 
-  // Função para excluir um vídeo
   const deleteVideo = useCallback(async (videoId) => {
     try {
       await videoApiService.deleteVideo(videoId);
 
-      // Remove o vídeo da lista
       setVideos(prevVideos => prevVideos.filter(video =>
         video.id.toString() !== videoId.toString() && video.uuid !== videoId));
 
-      // Se o vídeo atual foi excluído, limpa o estado
       if (currentVideo && (currentVideo.id.toString() === videoId.toString() || currentVideo.uuid === videoId)) {
         setCurrentVideo(null);
         setVideoFrames([]);
@@ -76,16 +72,14 @@ const VideoProvider = ({ children }) => {
       return true;
     } catch (error) {
       console.error(`Erro ao excluir vídeo ${videoId}:`, error);
-      throw error; // Propaga o erro para ser tratado pelo componente
+      throw error;
     }
   }, [currentVideo]);
 
-  // Função para atualizar a thumbnail de um vídeo
   const updateVideoThumbnail = useCallback(async (videoId, imageFile) => {
     try {
       const thumbnail = await videoImageService.generateThumbnail(videoId, imageFile);
 
-      // Atualiza o vídeo na lista com a nova thumbnail
       setVideos(prevVideos => prevVideos.map(video => {
         if (video.id.toString() === videoId.toString() || video.uuid === videoId) {
           return {
@@ -96,7 +90,6 @@ const VideoProvider = ({ children }) => {
         return video;
       }));
 
-      // Se for o vídeo atual, atualiza também
       if (currentVideo && (currentVideo.id.toString() === videoId.toString() || currentVideo.uuid === videoId)) {
         setCurrentVideo(prevVideo => ({
           ...prevVideo,
@@ -111,13 +104,8 @@ const VideoProvider = ({ children }) => {
     }
   }, [currentVideo]);
 
-  // Função para selecionar um frame como thumbnail
   const selectFrameAsThumbnail = useCallback(async (videoId, frame) => {
     try {
-      // Aqui apenas atualizamos a referência do vídeo para o frame selecionado
-      // como se já tivesse sido gerado/enviado via API
-
-      // Atualiza o vídeo na lista com o frame como thumbnail
       setVideos(prevVideos => prevVideos.map(video => {
         if (video.id.toString() === videoId.toString() || video.uuid === videoId) {
           return {
@@ -243,6 +231,23 @@ const VideoProvider = ({ children }) => {
     loadVideos();
   }, [loadVideos]);
 
+
+  const processedVideosCount = useMemo(() => {
+    return videos.filter(video => video.status === 'DONE').length;
+  }, [videos])
+
+  const processingVideosCount = useMemo(() => {
+    return videos.filter(video => video.status === 'PROCESSING' || video.status === 'UPLOADING').length;
+  }, [videos]);
+
+  const estimatedVideoSizeInMB = useMemo(() => {
+    return videos.reduce((total, video) => {
+      const size = video?.size || 20048576;
+      return total + (size / (1024 * 1024));
+    }, 0).toFixed(2);
+  }, [videos]);
+
+
   const contextValue = {
     videos, // Inverte a ordem para mostrar os mais recentes primeiro
     loadingVideos,
@@ -251,6 +256,9 @@ const VideoProvider = ({ children }) => {
     videoFrames,
     loadingFrames,
     framesError,
+    processedVideosCount,
+    processingVideosCount,
+    estimatedVideoSizeInMB,
     loadVideos,
     loadVideoFrames,
     uploadVideo,

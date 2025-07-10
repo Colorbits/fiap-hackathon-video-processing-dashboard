@@ -108,15 +108,13 @@ const VideoDetailPage = () => {
   // Define o estilo e mensagem de acordo com o status do vídeo
   const getStatusInfo = () => {
     const statusMap = {
-      'uploaded': { className: 'status-uploaded', message: 'Enviado' },
-      'uploading': { className: 'status-uploading', message: 'Enviando...' },
-      'processing': { className: 'status-processing', message: 'Processando...' },
-      'done': { className: 'status-completed', message: 'Concluído' },
-      'failed': { className: 'status-failed', message: 'Falhou' },
-      'ready': { className: 'status-ready', message: 'Pronto' }
+      'UPLOADED': { className: 'status-uploaded', message: 'Enviado' },
+      'PROCESSED': { className: 'status-uploading', message: 'Processado' },
+      'PROCESSING': { className: 'status-processing', message: 'Processando...' },
+      'DONE': { className: 'status-completed', message: 'Concluído' },
     };
 
-    return statusMap[currentVideo.status.toLowerCase()] || { className: '', message: currentVideo.status };
+    return statusMap[currentVideo.status.toUpperCase()] || { className: '', message: currentVideo.status };
   };
 
   const statusInfo = getStatusInfo();
@@ -149,19 +147,9 @@ const VideoDetailPage = () => {
               </span>
             </div>
             <div className="info-row">
-              <span className="info-label">Data de upload:</span>
-              <span>{new Date(currentVideo.createdAt).toLocaleDateString('pt-BR')}</span>
+              <span className="info-label">Name:</span>
+              <span>{currentVideo.name}</span>
             </div>
-            <div className="info-row">
-              <span className="info-label">Duração:</span>
-              <span>{currentVideo.duration || 'Indisponível'}</span>
-            </div>
-            {currentVideo.description && (
-              <div className="info-row description">
-                <span className="info-label">Descrição:</span>
-                <p>{currentVideo.description}</p>
-              </div>
-            )}
           </div>
 
           <div className="video-actions">
@@ -179,7 +167,6 @@ const VideoDetailPage = () => {
       </div>
 
       <div className="video-frames-section">
-        <h2>Frames do Vídeo</h2>
         {['done', 'ready'].includes(currentVideo.status?.toLowerCase()) ? (
           <VideoFrames videoUuid={videoUuid} />
         ) : (

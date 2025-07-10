@@ -20,10 +20,9 @@ const VideoList = () => {
   const getStatusInfo = (status) => {
     const statusMap = {
       'UPLOADED': { className: 'status-uploaded', message: 'Enviado' },
-      'UPLOADING': { className: 'status-uploading', message: 'Enviando...' },
+      'PROCESSED': { className: 'status-uploading', message: 'Processado' },
       'PROCESSING': { className: 'status-processing', message: 'Processando...' },
       'DONE': { className: 'status-completed', message: 'Concluído' },
-      'ERROR': { className: 'status-failed', message: 'Falhou' },
     };
 
     return statusMap[status] || { className: '', message: status };
@@ -65,7 +64,7 @@ const VideoList = () => {
       <h2>Seus Vídeos</h2>
       <div className="video-grid">
         {videos.reverse().map(video => {
-          const statusInfo = getStatusInfo(video.status);
+          const statusInfo = getStatusInfo(video.status.toUpperCase());
 
           return (
             <div
