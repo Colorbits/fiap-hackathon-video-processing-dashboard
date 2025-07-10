@@ -35,12 +35,6 @@ O projeto utiliza uma arquitetura de contextos para gerenciamento de estado glob
   - Atualização automática de status
   - Notificações de conclusão ou erros
 
-## Diagramas
-
-### Arquitetura de Componentes
-![Arquitetura de Componentes](https://github.com/Colorbits/fiap-hackathon-video-processing-dashboard/blob/main/docs/component-architecture.png?raw=true)
-
-O dashboard segue uma arquitetura moderna de componentes React, focada em modularidade e reusabilidade:
 
 #### Camadas da Aplicação
 
@@ -108,11 +102,11 @@ O dashboard segue uma arquitetura moderna de componentes React, focada em modula
 
 ### Pré-requisitos
 
-- Node.js 16+ instalado
+- Node.js 20+ instalado
 - NPM ou Yarn
 
 ### Configuração Local
-
+### Frontend
 #### 1 - Clone o repositório
 ```bash
 # Clone o repositório
@@ -135,8 +129,8 @@ yarn
 Crie um arquivo `.env.local` na raiz do projeto com o seguinte conteúdo:
 
 ```env
-VITE_API_URL=http://localhost:3000
-VITE_IMAGE_API_URL=http://localhost:3001/api
+VITE_API_URL=http://localhost:8080
+VITE_IMAGE_API_URL=http://localhost:8081/api
 ```
 
 Ajuste as URLs conforme a configuração do seu ambiente de backend.
@@ -152,6 +146,7 @@ yarn dev
 
 Acesse o dashboard em: [http://localhost:5173](http://localhost:5173)
 
+### Backend
 ### Kubernetes
 Para executar todo o ecossistema (frontend + backend) em Kubernetes, siga estas instruções:
 
