@@ -58,32 +58,6 @@ O projeto utiliza uma arquitetura de contextos para gerenciamento de estado glob
    - Extraem lógica reutilizável
    - Simplificam componentes ao separar lógica de apresentação
 
-### Fluxo de Dados
-
-![Fluxo de Dados](https://github.com/Colorbits/fiap-hackathon-video-processing-dashboard/blob/main/docs/data-flow.png?raw=true)
-
-## Dicionário de Linguagem Ubíqua
-
-- **Dashboard**: Interface principal que exibe informações e controles para o usuário.
-
-- **Vídeo**: Arquivo multimídia enviado pelo usuário para processamento e extração de frames.
-
-- **Frame**: Imagem individual extraída de um vídeo em um momento específico.
-
-- **Thumbnail**: Imagem representativa usada como prévia de um vídeo.
-
-- **Upload**: Processo de envio de um vídeo do dispositivo do usuário para o sistema.
-
-- **Status de Processamento**: Estado atual de um vídeo (pendente, processando, concluído, erro).
-
-- **Contexto**: Mecanismo para compartilhar estados e funções entre componentes sem prop drilling.
-
-- **Service**: Módulo que encapsula a lógica de comunicação com APIs externas.
-
-- **Token de Autenticação**: Credencial que identifica um usuário autenticado no sistema.
-
-- **Mock**: Dados simulados usados quando a API real não está disponível.
-
 ## Tech Stack
 
 - React 18+
@@ -242,16 +216,6 @@ fiap-hackathon-video-processing-dashboard/
 - `npm run test`: Executa os testes unitários
 - `npm run test:coverage`: Executa testes com relatório de cobertura
 
-### Padrões de Código
-
-O projeto segue padrões rigorosos de código para manter a qualidade e consistência:
-
-- **Componentes**: Preferencialmente funcionais, usando hooks para gerenciar estado
-- **Tipagem**: TypeScript para garantir tipagem estática
-- **Estilização**: CSS Modules ou styled-components para estilos isolados
-- **Nomenclatura**: PascalCase para componentes, camelCase para funções e variáveis
-- **Estado Global**: Context API para gerenciamento de estado compartilhado
-- **Testes**: Componentes críticos devem ter testes unitários
 
 ### Principais Funcionalidades
 
@@ -298,18 +262,3 @@ O dashboard se integra com os seguintes serviços de backend:
    - Gerenciamento de thumbnails
    - Download de imagens processadas
 
-O diagrama de comunicação entre o frontend e os serviços backend está disponível [aqui](https://github.com/Colorbits/fiap-hackathon-video-processing-dashboard/blob/main/docs/backend-communication.png).
-
-## Contribuição
-
-Para contribuir com o projeto:
-
-1. Faça um fork do repositório
-2. Crie um branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. Faça commit das alterações (`git commit -m 'Adiciona nova funcionalidade'`)
-4. Faça push para o branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
